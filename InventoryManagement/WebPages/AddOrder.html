@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="vendors\css\bootstrap.min.css" />
+    <link href="vendors/fontawesome-free-5.8.1-web/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors\custom.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="vendors/js/bootstrap.min.js"></script>
+    <script src="vendors/fontawesome-free-5.8.1-web/js/all.min.js"></script>
+    <script src="vendors/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <title>Add Order</title>
+</head>
+    <body ng-app="myApp">
+        <div class="container-fluid">
+            <div class="row">
+                <!--top nav-->
+                <nav class="top-nav">
+                        <span class="toggle-menu">
+                                <i class="fa fa-bars"></i>
+                                <i class="fa fa-caret-right"></i>
+                        </span>
+                    <a class="brand" href="Index.html"><i class="fab fa-opencart"></i> Inventory System</a>
+                    <ul>
+                        <li>
+                            <a href="#" id="lgout">Logout</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--side nav-->
+            <div id="side-menu-container">
+                <ul class="side-menu">
+                    <li>
+                        <a href="Index.html"> <i class="fa fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="Customers.html"> <i class="fa fa-user-alt"></i> Customers</a>
+                    </li>
+                    <li>
+                        <a href="Products.html"> <i class="fa fa-archive"></i> Products</a>
+                    </li>
+                    <li class="side-active">
+                        <a href="Orders.html"> <i class="fa fa-clipboard-list"></i> Orders</a>
+                    </li>
+                    <li>
+                        <a href="Employees.html"> <i class="fa fa-user-tie"></i> Employees</a>
+                    </li>
+                </ul>
+            </div>
+            <!--main content-->
+            <div class="container-fluid main-content" ng-controller="mainController">
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cname">Customer Name</label>
+                            <input type="text" id="cname" class="form-control">
+                        </div>
+                        <div class="form-inline">
+                            <label for="pname">Product Name</label>
+                            <select id="pname" ng-model="pname" ng-change="selectChange()" class="form-control w-50 ml-1 mr-1">
+                                <option ng-repeat="row in result" value="{{row.Id}}"> {{row.Name}} {{row.ManufName}} </option>
+                            </select>
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" ng-model="quantity" class="form-control ml-1" min="0" max="{{maxval}}"><span class="text-muted">/{{maxval}}</span>
+                            <button class="btn btn-primary" ng-click="addCart()"> <i class="fa fa-plus"></i> cart</button>
+                        </div>
+                       
+                    </div>
+                    <div class="col-md-12" style="max-height: 400px; overflow-y:scroll;">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Manifucturer</th>
+                                    <th>Qty.</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartTable">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3>TotalPrice: <span id="tprice"></span></h3>
+                    <button class="btn btn-dark ml-auto mr-2 mt-2" ng-click="addOrder()"><i class="fa fa-dollar-sign"></i> Sold</button>
+                </div>
+            </div>
+            <!--main content end-->
+        </div>
+        <script>
+            $(".toggle-menu").click(function (){
+                $("#side-menu-container").toggleClass("toggle");
+                $(".main-content").toggleClass("toggle-main");
+                $(".toggle-menu").toggleClass("toggled-btn");
+            });
+            //onload
+            $(document).ready(function () {
+                if (sessionStorage.getItem('lgn') == null) {
+                    location.href = 'Login.html';
+                }
+            });
+            //lgout
+            $("#lgout").click(function () {
+                sessionStorage.removeItem('lgn');
+                location.reload();
+            });
+            //angular script
+            var app = angular.module('myApp', []);
+            app.controller('mainController', function ($scope, $http) {
+                $http.get('/api/Products').then(function sucess(response) {
+                    $scope.result = response.data;
+                }, function error(response) {
+                    swal("error in getting product list " + response.statusText);
+                });
+                //selectchange
+                $scope.selectChange = function () {
+                    //console.log("select val : " + $scope.pname);
+                    $http.get('/api/Products/' + $scope.pname).then(function success(response) {
+                        $scope.maxval = response.data.Quantity;
+                    }, function error(response) {
+                        swal("error in getting product Quantity " + response.statusText);
+                    });
+                } 
+                var arr = [];
+                var totalp = 0;
+                $scope.addCart = function () {
+                    var cart = { "id": $scope.pname, "qty": $scope.quantity };
+                    //console.log(cart);
+                    if (sessionStorage.getItem('cart') == null) {
+                        arr.push(cart);
+                        sessionStorage.setItem('cart', JSON.stringify(arr));
+                    } else {
+                        arr = JSON.parse(sessionStorage.getItem('cart'));
+                        arr.push(cart);
+                        sessionStorage.setItem('cart', JSON.stringify(arr));
+                    }
+                    arr = JSON.parse(sessionStorage.getItem('cart'));
+                    var obj = arr.pop();
+                    console.log("last in array : " + obj.id);
+                    //display into table
+                    var onsuccess = function (data, header, status, config) {
+                        var txt = `<tr>
+                                    <td><img src="${data.ImagePath}" alt="prod. Img" style="height: 50px; width:50px;" /></td>
+                                    <td>${data.Name}</td>
+                                    <td>${data.ManufName}</td>
+                                    <td>${obj.qty}</td>
+                                    <td>${data.SalePrice * obj.qty}</td>
+                                </tr>`;
+                        $("#cartTable").append(txt);
+                        totalp = totalp + data.SalePrice * obj.qty;
+                        $("#tprice").text(totalp);
+                    }
+                    var onerror = function (data, header, status, config) {
+                        swal(data + ", "+ status);
+                    }
+                    var promise = $http.get('/api/Products/' + obj.id);
+                    promise.success(onsuccess);
+                    promise.error(onerror);
+                }
+                //add order
+                $scope.addOrder = function () {
+                    if (sessionStorage.getItem('cart') != null) {
+                        arr = JSON.parse(sessionStorage.getItem('cart'));
+                        //sessionStorage.removeItem('cart');
+                        var 
+                        for( var x in arr) {
+                            $http.get('/api/Products/' + arr[x].id).then(function (response) {
+                                var prod = response.data;
+                                prod.Quantity = prod.Quantity - arr[x].qty;
+                                debugger;
+                                $http.put('/api/Products/' + arr[x].id, prod).then(function success(response) {
+                                    var order = {
+                                        "CustomerName":$scope.pname,
+                                        "ProductId":arr[x].id,
+                                        "Quantity":arr[x].qty,
+                                        "TotalPrice":totalp,
+                                        "OrderNo":,
+                                        "SaleDate":""
+                                    };
+                                    $http.post('/api/Orders',order).then();
+                                },
+                                    function error(response) {
+                                        console.log("error in putting product" + response.statusCode);
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

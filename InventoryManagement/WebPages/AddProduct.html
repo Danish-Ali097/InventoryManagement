@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="vendors\css\bootstrap.min.css" />
+    <link href="vendors/fontawesome-free-5.8.1-web/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors\custom.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="vendors/js/bootstrap.min.js"></script>
+    <script src="vendors/fontawesome-free-5.8.1-web/js/all.min.js"></script>
+    <script src="vendors/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+</head>
+    <body ng-app="myApp">
+        <div class="container-fluid">
+            <div class="row">
+                <!--top nav-->
+                <nav class="top-nav">
+                        <span class="toggle-menu">
+                                <i class="fa fa-bars"></i>
+                                <i class="fa fa-caret-right"></i>
+                        </span>
+                    <a class="brand" href="Index.html"><i class="fab fa-opencart"></i> Inventory System</a>
+                    <ul>
+                        <li>
+                            <a href="#" id="lgout">Logout</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--side nav-->
+            <div id="side-menu-container">
+                <ul class="side-menu">
+                    <li>
+                        <a href="Index.html"> <i class="fa fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="Customers.html"> <i class="fa fa-user-alt"></i> Customers</a>
+                    </li>
+                    <li class="side-active">
+                        <a href="Products.html"> <i class="fa fa-archive"></i> Products</a>
+                    </li>
+                    <li>
+                        <a href="Orders.html"> <i class="fa fa-clipboard-list"></i> Orders</a>
+                    </li>
+                    <li>
+                        <a href="Employees.html"> <i class="fa fa-user-tie"></i> Employees</a>
+                    </li>
+                </ul>
+            </div>
+            <!--main content-->
+            <div class="container-fluid main-content" ng-controller="mainController">
+                <div class="row mt-2">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="pname">Product Name</label>
+                            <input type="text" id="pname" ng-model="pname" class="form-control">  
+                        </div>
+                        <div class="form-group">
+                            <label for="pmname">Manifacturer Name</label>
+                            <input type="text" id="pmname" ng-model="pmname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="pname">Exp. Date</label>
+                            <input type="date" id="expdate" ng-model="expdate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="downlimit">Down Limit</label>
+                            <input type="number" id="downlimit" ng-model="downlimit" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" ng-model="quantity" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="purchaseprice">Purchase Price</label>
+                            <input type="number" id="purchaseprice" ng-model="purchaseprice" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="saleprice">Sale Price</label>
+                            <input type="number" id="saleprice" ng-model="saleprice" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Product Image</label>
+                            <input type="file" id="image" class="form-control-file">
+                        </div>
+                        <button class="btn btn-light" id="add" ng-click="addProduct()"> <i class="fa fa-plus"></i> Add</button>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Image Previewer</h5>
+                        <div style="height:300px; width:400px;">
+                            <img src="#" id="imageprev" alt=".." class="img-thumbnail" style="height:inherit; width:inherit;">
+                        </div>
+                        <h6>
+                            height:<span id="height"></span>
+                            width:<span id="width"></span>
+                        </h6>
+                        <h5 id="result"></h5>
+                        <button class="btn btn-secondary" id="upld" ng-click="uploadImage()" disabled> <i class="fa fa-upload"></i> Upload</button>
+                    </div>
+                </div>
+            </div>
+            <!--main content end-->
+        </div>
+        <script>
+            $(".toggle-menu").click(function (){
+                $("#side-menu-container").toggleClass("toggle");
+                $(".main-content").toggleClass("toggle-main");
+                $(".toggle-menu").toggleClass("toggled-btn");
+            });
+            //onload
+            $(document).ready(function () {
+                if (sessionStorage.getItem('lgn') == null) {
+                    location.href = 'Login.html';
+                }
+            });
+            //load image to image previewer
+            $('#image').change(function () {
+                $("#add").attr("disabled",true);
+                var img = this.files[0];
+                var reader = new FileReader;
+                reader.readAsDataURL(img);
+                reader.onload = function (e) {
+                    var file = new Image;
+                    file.src = e.target.result;
+                    file.onload = function () {
+                        $("#height").text(file.height);
+                        $("#width").text(file.width);
+                        $("#imageprev").attr("src", file.src);
+                        $("#upld").removeAttr("disabled");
+                    }
+                }
+
+            });
+            //load to image previewer end
+            $("#lgout").click(function () {
+                sessionStorage.removeItem('lgn');
+                location.reload();
+            });
+            //angular script
+            var imgpath = "/App_Content/Images/Product/Default.jpg";
+            var app = angular.module('myApp', []);
+            app.controller('mainController', function ($scope, $http) {
+                $scope.uploadImage = function () {
+                    var file = $("#image").get(0).files;
+                    var data = new FormData;
+                    data.append("ImageFile", file[0]);
+                    data.append("PathtoSave", "/App_Content/Images/Product/");
+                    $.ajax({
+                        type: "Post",
+                        url: "/Test/ImageUpload",
+                        data: data,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            $("#result").addClass('text-success');
+                            $("#result").append(response + " image uploaded!");
+                            $("#add").removeAttr("disabled");
+                            imgpath = "/App_Content/Images/Product/" + response;
+                        }
+                    });
+                } 
+                $scope.addProduct = function () {
+                    var product = {
+                        "Name":$scope.pname,
+                        "ManufName":$scope.pmname,
+                        "ExpDate":$scope.expdate,
+                        "DownLimit":$scope.downlimit,
+                        "Quantity":$scope.quantity,
+                        "PurchasePrice":$scope.purchaseprice,
+                        "SalePrice":$scope.saleprice,
+                        "ImagePath":imgpath,
+                        "PurchaseDate":""
+                    };
+                    console.log(product);
+                    debugger;
+                    var onSuccess = function (data, status, headers, config) {
+                        swal({
+                            text: "Product added",
+                            icon: "success",
+                            buttons: { ok: true }
+                        });
+                    };
+                    var onError = function (data, status, headers, config) {
+                        console.log("Error in adding product : " + status);
+                        swal({
+                            text: "Product not added",
+                            icon: "warning",
+                            buttons: { ok: true }
+                        });
+                    };
+                    var promise = $http.post('/api/Products', product);
+                    debugger;
+                    promise.success(onSuccess);
+                    promise.error(onError);
+                }
+            });
+        </script>
+    </body>
+</html>

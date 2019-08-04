@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="vendors\css\bootstrap.min.css"/>
+        <link href="vendors/fontawesome-free-5.8.1-web/css/all.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendors\custom.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="vendors/js/bootstrap.min.js"></script>
+        <script src="vendors/fontawesome-free-5.8.1-web/js/all.min.js"></script>
+        <title>Products</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!--top nav-->
+                <nav class="top-nav">
+                        <span class="toggle-menu">
+                                <i class="fa fa-bars"></i>
+                                <i class="fa fa-caret-right"></i>
+                        </span>
+                    <a class="brand" href="Index.html"><i class="fab fa-opencart"></i> Inventory System</a>
+                    <ul>
+                        <li>
+                            <a href="Login.html">Login</a>
+                        </li>
+                        <li>
+                            <a href="Signup.html">Signup</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--side nav-->
+            <div id="side-menu-container">
+                <ul class="side-menu">
+                    <li>
+                        <a href="Index.html"> <i class="fa fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li class="side-active">
+                        <a href="#"> <i class="fa fa-user-alt"></i> Customers</a>
+                    </li>
+                    <li>
+                        <a href="Products.html"> <i class="fa fa-archive"></i> Products</a>
+                    </li>
+                    <li>
+                        <a href="Orders.html"> <i class="fa fa-clipboard-list"></i> Orders</a>
+                    </li>
+                    <li>
+                        <a href="Employees.html"> <i class="fa fa-user-tie"></i> Employees</a>
+                    </li>
+                </ul>
+            </div>
+            <!--main content-->
+            <div class="container-fluid main-content">
+                <div class="row mt-5">
+                   <table class="table table-striped table-hover mt-2">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Company</th>
+                                <th>Exp. Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> <img src="" alt="product avatar" style="height: 200px; width:200px;"/> </td>
+                                <td>jjk</td>
+                                <td>jjk</td>
+                                <td>jjk</td>
+                                <td> <a href="#">edit</a> | <a href="#">block</a> </td>
+                            </tr>
+                        </tbody>
+                   </table>
+                </div>
+            </div>
+            <!--main content end-->
+        </div>
+        <script>
+            $(".toggle-menu").click(function (){
+                $("#side-menu-container").toggleClass("toggle");
+                $(".main-content").toggleClass("toggle-main");
+                $(".toggle-menu").toggleClass("toggled-btn");
+            });
+        </script>
+    </body>
+</html>

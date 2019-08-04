@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="vendors\css\bootstrap.min.css" />
+    <link href="vendors/fontawesome-free-5.8.1-web/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendors\custom.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="vendors/js/bootstrap.min.js"></script>
+    <script src="vendors/fontawesome-free-5.8.1-web/js/all.min.js"></script>
+    <script src="vendors/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <title>Signup</title>
+</head>
+    <body ng-app="myApp">
+        <div class="container-fluid">
+            <div class="row">
+                <!--top nav-->
+                <nav class="top-nav">
+                    <a class="brand" href="Index.html" style="margin-top:1.7%; margin-left:6%;"><i class="fab fa-opencart"></i> Inventory System</a>
+                    <ul>
+                        <li>
+                            <a href="Login.html">Login</a>
+                        </li>
+                        <li class="active">
+                            <a href="#">Signup</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--main content-->
+            <div class="container-fluid" ng-controller="mainControllor">
+                <div class="row mt-5">
+                    <div class="card" style="margin:0 auto; height: 90%; width:25% ;">
+                        <img class="card-img-top" src="Images/adventure-ahead-arrow-66100.jpg" style="height:30%;" alt="loginimg" />
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="Name">Name</label>
+                                <input class="form-control" id="Name" ng-model="Name" type="text" />
+                                <label for="Email">Email</label>
+                                <input class="form-control" id="Email" ng-model="Email" type="email" />
+                                <label for="Password">Password</label>
+                                <input class="form-control" id="Password" ng-model="Password" type="password" />
+                                <button class="custom-form-btn" ng-click="Signup()">Signup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--main content end-->
+        </div>
+        <script>
+            var app = angular.module('myApp', []);
+            console.log(app);
+            app.controller('mainControllor', function ($scope, $http) {
+                console.log("inside controllor : " + app.name);
+                //this function call on signup btn click
+                $scope.Signup = function () {
+                    var admin = {
+                        "Name": $scope.Name,
+                        "Email": $scope.Email,
+                        "Password": $scope.Password
+                    };
+                    console.log(admin);
+                    var onSuccess = function (data, status, headers, config) {
+                        swal({
+                            text: "Signup successful!",
+                            icon: "success",
+                            buttons: { ok: true }
+                        });
+                    };
+                    var onError = function (data, status, headers, config) {
+                        $scope.error = status;
+                    };
+                    var promise = $http.post('/api/Admins', admin);
+                    debugger;
+                    promise.success(onSuccess);
+                    promise.error(onError);
+                }; 
+            });
+        </script>
+    </body>
+</html>
