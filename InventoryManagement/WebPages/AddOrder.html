@@ -64,7 +64,7 @@
                                 <option ng-repeat="row in result" value="{{row.Id}}"> {{row.Name}} {{row.ManufName}} </option>
                             </select>
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" ng-model="quantity" class="form-control ml-1" min="0" max="{{maxval}}"><span class="text-muted">/{{maxval}}</span>
+                            <input type="number" id="quantity" ng-change="qtyChange()" ng-model="quantity" class="form-control ml-1" min="0" max="{{maxval}}"><span class="text-muted">/{{maxval}}</span>
                             <button class="btn btn-primary" ng-click="addCart()"> <i class="fa fa-plus"></i> cart</button>
                         </div>
                        
@@ -121,10 +121,24 @@
                     //console.log("select val : " + $scope.pname);
                     $http.get('/api/Products/' + $scope.pname).then(function success(response) {
                         $scope.maxval = response.data.PurchaseQuantity - response.data.SoldQuantity;
+                        if ($scope.maxval <= 0) {
+                            $("#quantity").attr("disabled", true);
+                        } else {
+                            $("#quantity").attr("disabled", false);
+                        }
                     }, function error(response) {
                         swal("error in getting product Quantity " + response.statusText);
                     });
                 } 
+                $scope.qtyChange = function () {
+                    console.log($scope.quantity);
+                    if ($scope.quantity > $scope.maxval) {
+                        $scope.quantity = $scope.maxval;
+                    }
+                    if ($scope.quantity < 1) {
+                        $scope.quantity = 1;
+                    }
+                }
                 var arr = [];
                 var totalp = 0;
                 $scope.addCart = function () {

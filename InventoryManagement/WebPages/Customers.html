@@ -61,6 +61,7 @@
                                 <th>Customer Name</th>
                                 <th>Product Name</th>
                                 <th>Exp. Date</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -114,6 +115,7 @@
                                 <td>${data[x].CustomerName}</td>
                                 <td id="pname${data[x].Id}"></td>
                                 <td id="pexp${data[x].Id}"></td>
+                                <td>${data[x].Status}</td>
                                 <td> <a href="#" onclick="revert(${data[x].Id})"> <i class="fa fa-undo-alt"></i> </a> </td>
                             </tr>`;
                     }

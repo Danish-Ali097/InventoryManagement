@@ -116,13 +116,29 @@
                 //deleteproduct
                 $scope.deleteProd = function (id) {
                     var onsuccess = function (data, header, status, config) {
-                        swal({
-                            text: "Delete successfully",
-                            icon: "success",
-                            buttons: {
-                                ok: true
+                        $http.get('/api/Orders/').then(function success(response) {
+                            var data = response.data;
+                            for (var x in data) {
+                                if (data[x].ProductId == id) {
+                                    $http.delete('/api/Orders/' + data[x].Id).then(function (response) {
+                                        swal({
+                                            text: "Delete successfully",
+                                            icon: "success",
+                                            buttons: {
+                                                ok: true
+                                            }
+                                        }).then(val => {
+                                            if (val) {
+                                                location.reload();
+                                            }
+                                        });
+                                    });
+                                }
                             }
-                        }).then(val => { if (val) { location.reload(); } });
+                            
+                        }, function error(response) {
+                        });
+                        
                     }
                     var onerror = function (data, header, status, config) {
                         swal({

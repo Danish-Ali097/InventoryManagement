@@ -54,7 +54,7 @@
             <div class="container-fluid main-content" ng-controller="mainController">
                 <div class="row mt-5">
                    <a class="btn btn-light ml-auto" href="AddOrder.html"> <i class="fa fa-plus"></i> Add Order</a>
-                   <table class="table table-striped table-hover mt-2">
+                   <table class="table table-striped table-hover mt-2" id="tab1">
                         <thead>
                             <tr>
                                 <th>Image</th>
@@ -65,6 +65,8 @@
                                 <th>Customer Name</th>
                                 <th>Price</th>
                                 <th>Status</th>
+                                <th>Reason</th>
+                                <th>Date Purchase</th>
                             </tr>
                         </thead>
                         <tbody id="orderoutput">
@@ -76,6 +78,36 @@
             <!--main content end-->
         </div>
         <script>
+            //sort js
+            var thIndex = 0,
+                curThIndex = null;
+
+            $(function () {
+                $('table thead tr th').click(function () {
+                    thIndex = $(this).index();
+                    if (thIndex != curThIndex) {
+                        curThIndex = thIndex;
+                        sorting = [];
+                        tbodyHtml = null;
+                        $('table tbody tr').each(function () {
+                            sorting.push($(this).children('td').eq(curThIndex).html() + ', ' + $(this).index());
+                        });
+
+                        sorting = sorting.sort();
+                        sorting = sorting.reverse();
+                        sortIt();
+                    }
+                });
+            })
+
+            function sortIt() {
+                for (var sortingIndex = 0; sortingIndex < sorting.length; sortingIndex++) {
+                    rowId = parseInt(sorting[sortingIndex].split(', ')[1]);
+                    tbodyHtml = tbodyHtml + $('table tbody tr').eq(rowId)[0].outerHTML;
+                }
+                $('table tbody').html(tbodyHtml);
+            }
+            //sort js end
             $(".toggle-menu").click(function (){
                 $("#side-menu-container").toggleClass("toggle");
                 $(".main-content").toggleClass("toggle-main");
@@ -99,7 +131,7 @@
                     var output = "";
                     for (var x in data) {
                         getProd(data[x].ProductId, data[x].Id);
-                        output += `<tr> <td><img id="img${data[x].Id}" src="#" style="height:50px; width:50px;" /></td> <td id="pname${data[x].Id}"></td> <td id="compname${data[x].Id}"></td> <td id="expdate${data[x].Id}"></td> <td>${data[x].Quantity}</td> <td>${data[x].CustomerName}</td> <td>${data[x].TotalPrice}</td><td>${data[x].Status}</td> </tr>`;
+                        output += `<tr> <td><img id="img${data[x].Id}" src="#" style="height:50px; width:50px;" /></td> <td id="pname${data[x].Id}"></td> <td id="compname${data[x].Id}"></td> <td id="expdate${data[x].Id}"></td> <td>${data[x].Quantity}</td> <td>${data[x].CustomerName}</td> <td>${data[x].TotalPrice}</td><td>${data[x].Status}</td><td>${data[x].Reason}</td><td>${data[x].SaleDate}</td> </tr>`;
                     }
                     $("#orderoutput").html(output);
                 }
