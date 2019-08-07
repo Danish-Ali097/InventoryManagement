@@ -13,10 +13,10 @@ namespace InventoryManagement.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class InventoryDBEntities : DbContext
+    public partial class InventoryDBEntities2 : DbContext
     {
-        public InventoryDBEntities()
-            : base("name=InventoryDBEntities")
+        public InventoryDBEntities2()
+            : base("name=InventoryDBEntities2")
         {
         }
     

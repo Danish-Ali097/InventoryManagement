@@ -14,7 +14,7 @@ namespace InventoryManagement.Controllers.api
 {
     public class AdminsController : ApiController
     {
-        private InventoryDBEntities db = new InventoryDBEntities();
+        private InventoryDBEntities2 db = new InventoryDBEntities2();
 
         // GET: api/Admins
         public IQueryable<Admin> GetAdmins()

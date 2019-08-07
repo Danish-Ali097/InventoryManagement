@@ -19,10 +19,11 @@ namespace InventoryManagement.Models
         public string ManufName { get; set; }
         public string ExpDate { get; set; }
         public int DownLimit { get; set; }
-        public int Quantity { get; set; }
+        public int PurchaseQuantity { get; set; }
         public int PurchasePrice { get; set; }
         public int SalePrice { get; set; }
         public string ImagePath { get; set; }
         public string PurchaseDate { get; set; }
+        public Nullable<int> SoldQuantity { get; set; }
     }
 }

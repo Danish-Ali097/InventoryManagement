@@ -21,5 +21,7 @@ namespace InventoryManagement.Models
         public int TotalPrice { get; set; }
         public int OrderNo { get; set; }
         public string SaleDate { get; set; }
+        public string Status { get; set; }
+        public string Reason { get; set; }
     }
 }

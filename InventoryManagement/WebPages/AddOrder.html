@@ -56,7 +56,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="cname">Customer Name</label>
-                            <input type="text" id="cname" class="form-control">
+                            <input type="text" ng-model="cname" id="cname" class="form-control">
                         </div>
                         <div class="form-inline">
                             <label for="pname">Product Name</label>
@@ -120,7 +120,7 @@
                 $scope.selectChange = function () {
                     //console.log("select val : " + $scope.pname);
                     $http.get('/api/Products/' + $scope.pname).then(function success(response) {
-                        $scope.maxval = response.data.Quantity;
+                        $scope.maxval = response.data.PurchaseQuantity - response.data.SoldQuantity;
                     }, function error(response) {
                         swal("error in getting product Quantity " + response.statusText);
                     });
@@ -165,26 +165,58 @@
                 $scope.addOrder = function () {
                     if (sessionStorage.getItem('cart') != null) {
                         arr = JSON.parse(sessionStorage.getItem('cart'));
-                        //sessionStorage.removeItem('cart');
-                        var 
+                        sessionStorage.removeItem('cart');
+                        var oid = Math.random().toString().slice(2, 11);
                         for( var x in arr) {
                             $http.get('/api/Products/' + arr[x].id).then(function (response) {
                                 var prod = response.data;
-                                prod.Quantity = prod.Quantity - arr[x].qty;
+                                prod.SoldQuantity = prod.SoldQuantity + arr[x].qty;
                                 debugger;
                                 $http.put('/api/Products/' + arr[x].id, prod).then(function success(response) {
                                     var order = {
-                                        "CustomerName":$scope.pname,
+                                        "CustomerName":$scope.cname,
                                         "ProductId":arr[x].id,
                                         "Quantity":arr[x].qty,
                                         "TotalPrice":totalp,
-                                        "OrderNo":,
-                                        "SaleDate":""
+                                        "OrderNo":Number(oid),
+                                        "SaleDate": "",
+                                        "Status": "Sold",
+                                        "Reason":""
                                     };
-                                    $http.post('/api/Orders',order).then();
-                                },
+                                    $http.post('/api/Orders', order).then(function success(response) {
+                                        swal({
+                                            text: "Order placed!",
+                                            icon: "success",
+                                            button: { ok: true }
+                                        }).then(val => {
+                                            if (val) {
+                                                $http.get('/api/Products/' + response.data.ProductId).then(function (response) {
+                                                    var temp = response.data.PurchaseQuantity - response.data.SoldQuantity;
+                                                    if (temp <= response.data.DownLimit) {
+                                                        swal({
+                                                            text: "Item reached its DownLimit! \n Name : " + response.data.Name,
+                                                            icon: "warning",
+                                                            button: { ok: true }
+                                                        }).then(val => {
+                                                            if (val)
+                                                            { location.reload(); }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        
+                                    },
                                     function error(response) {
-                                        console.log("error in putting product" + response.statusCode);
+                                        swal({
+                                            text: "Order not placed!" + response.statusText,
+                                            icon: "error",
+                                            ok: true
+                                        }).then(val => { if (val) { location.reload(); } });
+                                    });
+                                },
+                                function error(response) {
+                                        console.log("error in putting product" + response.statusText);
                                 });
                             });
                         }

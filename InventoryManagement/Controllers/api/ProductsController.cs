@@ -14,7 +14,7 @@ namespace InventoryManagement.Controllers.api
 {
     public class ProductsController : ApiController
     {
-        private InventoryDBEntities db = new InventoryDBEntities();
+        private InventoryDBEntities2 db = new InventoryDBEntities2();
 
         // GET: api/Products
         public IQueryable<Product> GetProducts()
@@ -78,7 +78,7 @@ namespace InventoryManagement.Controllers.api
             {
                 return BadRequest(ModelState);
             }
-
+            product.PurchaseDate = System.DateTime.Now.ToString();
             db.Products.Add(product);
             db.SaveChanges();
 

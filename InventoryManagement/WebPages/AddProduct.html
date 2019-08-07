@@ -71,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" ng-model="quantity" class="form-control">
+                            <input type="number" id="quantity" ng-model="qty" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="purchaseprice">Purchase Price</label>
@@ -167,11 +167,12 @@
                         "ManufName":$scope.pmname,
                         "ExpDate":$scope.expdate,
                         "DownLimit":$scope.downlimit,
-                        "Quantity":$scope.quantity,
+                        "PurchaseQuantity":$scope.qty,
                         "PurchasePrice":$scope.purchaseprice,
                         "SalePrice":$scope.saleprice,
                         "ImagePath":imgpath,
-                        "PurchaseDate":""
+                        "PurchaseDate": "",
+                        "SoldQuantity":""
                     };
                     console.log(product);
                     debugger;
@@ -180,6 +181,10 @@
                             text: "Product added",
                             icon: "success",
                             buttons: { ok: true }
+                        }).then(val => {
+                            if (val) {
+                                location.reload();
+                            }
                         });
                     };
                     var onError = function (data, status, headers, config) {
@@ -188,6 +193,10 @@
                             text: "Product not added",
                             icon: "warning",
                             buttons: { ok: true }
+                        }).then(val => {
+                            if (val) {
+                                location.reload();
+                            }
                         });
                     };
                     var promise = $http.post('/api/Products', product);

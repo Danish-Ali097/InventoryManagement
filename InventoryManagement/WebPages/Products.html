@@ -119,7 +119,7 @@
                             buttons: {
                                 ok: true
                             }
-                        });
+                        }).then(val => { if (val) { location.reload(); } });
                     }
                     var onerror = function (data, header, status, config) {
                         swal({

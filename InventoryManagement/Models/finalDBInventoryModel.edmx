@@ -37,6 +37,8 @@
           <Property Name="TotalPrice" Type="int" Nullable="false" />
           <Property Name="OrderNo" Type="int" Nullable="false" />
           <Property Name="SaleDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -47,11 +49,12 @@
           <Property Name="ManufName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ExpDate" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DownLimit" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="PurchaseQuantity" Type="int" Nullable="false" />
           <Property Name="PurchasePrice" Type="int" Nullable="false" />
           <Property Name="SalePrice" Type="int" Nullable="false" />
           <Property Name="ImagePath" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="PurchaseDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SoldQuantity" Type="int" />
         </EntityType>
         <EntityContainer Name="InventoryDBModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
@@ -96,6 +99,8 @@
           <Property Name="TotalPrice" Type="Int32" Nullable="false" />
           <Property Name="OrderNo" Type="Int32" Nullable="false" />
           <Property Name="SaleDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -106,13 +111,14 @@
           <Property Name="ManufName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ExpDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DownLimit" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="PurchaseQuantity" Type="Int32" Nullable="false" />
           <Property Name="PurchasePrice" Type="Int32" Nullable="false" />
           <Property Name="SalePrice" Type="Int32" Nullable="false" />
           <Property Name="ImagePath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PurchaseDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SoldQuantity" Type="Int32" />
         </EntityType>
-        <EntityContainer Name="InventoryDBEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="InventoryDBEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
@@ -123,7 +129,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="InventoryDBModelStoreContainer" CdmEntityContainer="InventoryDBEntities">
+        <EntityContainerMapping StorageEntityContainer="InventoryDBModelStoreContainer" CdmEntityContainer="InventoryDBEntities2">
           <EntitySetMapping Name="Admins">
             <EntityTypeMapping TypeName="InventoryDBModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
@@ -157,6 +163,8 @@
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
                 <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
                 <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -168,11 +176,12 @@
                 <ScalarProperty Name="ManufName" ColumnName="ManufName" />
                 <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
                 <ScalarProperty Name="DownLimit" ColumnName="DownLimit" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PurchaseQuantity" ColumnName="PurchaseQuantity" />
                 <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
                 <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="SoldQuantity" ColumnName="SoldQuantity" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

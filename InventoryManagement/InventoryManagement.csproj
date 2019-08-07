@@ -52,6 +52,12 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -59,6 +65,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -72,6 +81,9 @@
     </Reference>
     <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=5.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.3.1\lib\net45\System.Web.Http.OData.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -183,32 +195,32 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Admin.cs">
-      <DependentUpon>IMSModel.tt</DependentUpon>
+      <DependentUpon>finalDBInventoryModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Employee.cs">
-      <DependentUpon>IMSModel.tt</DependentUpon>
+      <DependentUpon>finalDBInventoryModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\finalDBInventoryModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>finalDBInventoryModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\finalDBInventoryModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>finalDBInventoryModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\finalDBInventoryModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>finalDBInventoryModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ImageUploadModel.cs" />
-    <Compile Include="Models\IMSModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IMSModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IMSModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IMSModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IMSModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IMSModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\Order.cs">
-      <DependentUpon>IMSModel.tt</DependentUpon>
+      <DependentUpon>finalDBInventoryModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs">
-      <DependentUpon>IMSModel.tt</DependentUpon>
+      <DependentUpon>finalDBInventoryModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -225,15 +237,15 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\IMSModel.Context.tt">
+    <Content Include="Models\finalDBInventoryModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IMSModel.Context.cs</LastGenOutput>
-      <DependentUpon>IMSModel.edmx</DependentUpon>
+      <DependentUpon>finalDBInventoryModel.edmx</DependentUpon>
+      <LastGenOutput>finalDBInventoryModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\IMSModel.tt">
+    <Content Include="Models\finalDBInventoryModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>IMSModel.edmx</DependentUpon>
-      <LastGenOutput>IMSModel.cs</LastGenOutput>
+      <DependentUpon>finalDBInventoryModel.edmx</DependentUpon>
+      <LastGenOutput>finalDBInventoryModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1828,12 +1840,12 @@
     <Content Include="WebPages\vendors\js\bootstrap.bundle.min.js" />
     <Content Include="WebPages\vendors\js\bootstrap.js" />
     <Content Include="WebPages\vendors\js\bootstrap.min.js" />
-    <EntityDeploy Include="Models\IMSModel.edmx">
+    <EntityDeploy Include="Models\finalDBInventoryModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>IMSModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>finalDBInventoryModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\IMSModel.edmx.diagram">
-      <DependentUpon>IMSModel.edmx</DependentUpon>
+    <Content Include="Models\finalDBInventoryModel.edmx.diagram">
+      <DependentUpon>finalDBInventoryModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -1920,6 +1932,7 @@
     <Content Include="WebPages\vendors\js\bootstrap.min.js.map" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Content\Images\Employee\" />
     <Folder Include="App_Content\Images\Product\" />
     <Folder Include="Views\Test\" />
   </ItemGroup>

@@ -53,32 +53,53 @@
             <div class="container-fluid main-content" ng-controller="mainController">
                 <div class="row mt-5">
                     <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
-                                    <h1> <i class="fa fa-user"></i> </h1>
-                                    <h5>Customers</h5>
+                            <div class="card" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h1> <i class="fa fa-user"></i> </h1>
+                                            <h5>Customers</h5>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h1 style="font-size:70px;">{{noCust}}</h1>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                     </div>
                     <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
-                                    <h1> <i class="fa fa-archive"></i> </h1>
-                                    <h5>Products</h5>
+                            <div class="card" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h1> <i class="fa fa-archive"></i> </h1>
+                                            <h5>Products</h5>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h1 style="font-size:70px;">{{noProd}}</h1>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                     </div>
                     <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
-                                    <h1> <i class="fa fa-chart-line"></i> </h1>
-                                    <h5>Sales</h5>
+                            <div class="card" style=" border-radius:10px; border-left:6px solid black; text-align:center;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h1> <i class="fa fa-chart-line"></i> </h1>
+                                            <h5>Sales</h5>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h1 style="font-size:70px;">{{noSale}}</h1>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="overflow:scroll;">
                         <table class="table table-striped table-hover table-bordered mt-2 text-center">
                                 <thead>
                                         <tr>
@@ -141,9 +162,23 @@
             app.controller('mainController', function ($scope, $http) {
                 //when on load
                 var onsuccess = function (data, status, header, config) {
+                    var temp = [];
                     for (var x in data) {
-                        getOrder(data[x]);
+                        temp.push({
+                            "ProdName": data[x].Name,
+                            "CompName": data[x].ManufName,
+                            "ExpDate": data[x].ExpDate,
+                            "Pprice": data[x].PurchasePrice,
+                            "Pqty": data[x].PurchaseQuantity,
+                            "Sprice": data[x].SalePrice,
+                            "Sqty": data[x].SoldQuantity,
+                            "Rprice": (data[x].PurchaseQuantity - data[x].SoldQuantity) * (data[x].PurchasePrice),
+                            "Rqty": (data[x].PurchaseQuantity - data[x].SoldQuantity),
+                            "profloss": (data[x].SalePrice * data[x].SoldQuantity) - (data[x].PurchasePrice * data[x].SoldQuantity)
+                        });
                     }
+                    console.log(temp);
+                    $scope.res = temp;
                 }
                 var onerror = function (data, status, header, config) {
                     console.log('error getting products : ' + status);
@@ -152,37 +187,25 @@
                 promise.success(onsuccess);
                 promise.error(onerror);
                 //onload end
-                function getOrder(prod) {
-                    var onsuccess = function (data, status, header, config) {
-                        var qty = 0;
-                        var temp;
-                        for (var x in data) {
-                            if (data[x].ProductId == prod.Id) {
-                                qty += data[x].Quantity;
-                                temp[x] += {
-                                    "ProdName": prod.Name,
-                                    "CompName": prod.ManufName,
-                                    "ExpDate": prod.ExpDate,
-                                    "Pprice": prod.PurchasePrice,
-                                    "Pqty": prod.Quantity,
-                                    "Sprice": prod.SalePrice,
-                                    "Sqty": qty,
-                                    "Rprice":(prod.Quantity - qty) * prod.Price,
-                                    "Rqty": (prod.Quantity - qty),
-                                    "profloss": (prod.SalePrice * qty) - (prod.PurchasePrice * qty)
-                                };
-                            }
-                        }
-                        console.log(temp);
-                        $scope.res = temp;
+                $http.get('/api/Products').then(function (response) {
+                    var data = response.data;
+                    var pcount = 0;
+                    var salecount = 0;
+                    for (var x in data) {
+                        pcount++;
+                        salecount = salecount + data[x].SoldQuantity;
                     }
-                    var onerror = function (data, status, header, config) {
-                        console.log('error getting orders : ' + status);
+                    $scope.noProd = pcount;
+                    $scope.noSale = salecount;
+                });
+                $http.get('/api/Orders').then(function (response) {
+                    var data = response.data;
+                    var ccount = 0;
+                    for (var x in data) {
+                        ccount++;
                     }
-                    var promise = $http.get('/api/Orders');
-                    promise.success(onsuccess);
-                    promise.error(onerror);
-                }
+                    $scope.noCust = ccount;
+                });
             });
         </script>
     </body>
