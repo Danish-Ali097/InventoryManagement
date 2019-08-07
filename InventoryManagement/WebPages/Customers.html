@@ -52,6 +52,7 @@
             </div>
             <!--main content-->
             <div class="container-fluid main-content" ng-controller="mainController">
+                <input class="form-control mt-2" type="text" name="search" placeholder="search:"  id="srch" />
                 <div class="row mt-5">
                    <table class="table table-striped table-hover mt-2">
                         <thead>
@@ -88,6 +89,16 @@
                 sessionStorage.removeItem('lgn');
                 location.reload();
             });
+            //search
+            $(document).ready(function () {
+                $("#srch").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#custoutput tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+            //search end
             //angular
             var app = angular.module('myApp', []);
             app.controller('mainController', function ($scope, $http) {
