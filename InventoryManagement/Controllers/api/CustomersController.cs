@@ -12,44 +12,44 @@ using InventoryManagement.Models;
 
 namespace InventoryManagement.Controllers.api
 {
-    public class AdminsController : ApiController
+    public class CustomersController : ApiController
     {
         private InventoryDBEntities3 db = new InventoryDBEntities3();
 
-        // GET: api/Admins
-        public IQueryable<Admin> GetAdmins()
+        // GET: api/Customers
+        public IQueryable<Customer> GetCustomers()
         {
-            return db.Admins;
+            return db.Customers;
         }
 
-        // GET: api/Admins/5
-        [ResponseType(typeof(Admin))]
-        public IHttpActionResult GetAdmin(int id)
+        // GET: api/Customers/5
+        [ResponseType(typeof(Customer))]
+        public IHttpActionResult GetCustomer(int id)
         {
-            Admin admin = db.Admins.Find(id);
-            if (admin == null)
+            Customer customer = db.Customers.Find(id);
+            if (customer == null)
             {
                 return NotFound();
             }
 
-            return Ok(admin);
+            return Ok(customer);
         }
 
-        // PUT: api/Admins/5
+        // PUT: api/Customers/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutAdmin(int id, Admin admin)
+        public IHttpActionResult PutCustomer(int id, Customer customer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != admin.Id)
+            if (id != customer.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(admin).State = EntityState.Modified;
+            db.Entry(customer).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace InventoryManagement.Controllers.api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AdminExists(id))
+                if (!CustomerExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace InventoryManagement.Controllers.api
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Admins
-        [ResponseType(typeof(Admin))]
-        public IHttpActionResult PostAdmin(Admin admin)
+        // POST: api/Customers
+        [ResponseType(typeof(Customer))]
+        public IHttpActionResult PostCustomer(Customer customer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Admins.Add(admin);
+            db.Customers.Add(customer);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = admin.Id }, admin);
+            return CreatedAtRoute("DefaultApi", new { id = customer.Id }, customer);
         }
 
-        // DELETE: api/Admins/5
-        [ResponseType(typeof(Admin))]
-        public IHttpActionResult DeleteAdmin(int id)
+        // DELETE: api/Customers/5
+        [ResponseType(typeof(Customer))]
+        public IHttpActionResult DeleteCustomer(int id)
         {
-            Admin admin = db.Admins.Find(id);
-            if (admin == null)
+            Customer customer = db.Customers.Find(id);
+            if (customer == null)
             {
                 return NotFound();
             }
 
-            db.Admins.Remove(admin);
+            db.Customers.Remove(customer);
             db.SaveChanges();
 
-            return Ok(admin);
+            return Ok(customer);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace InventoryManagement.Controllers.api
             base.Dispose(disposing);
         }
 
-        private bool AdminExists(int id)
+        private bool CustomerExists(int id)
         {
-            return db.Admins.Count(e => e.Id == id) > 0;
+            return db.Customers.Count(e => e.Id == id) > 0;
         }
     }
 }

@@ -190,15 +190,21 @@
                 $http.get('/api/Products').then(function (response) {
                     var data = response.data;
                     var pcount = 0;
-                    var salecount = 0;
                     for (var x in data) {
                         pcount++;
-                        salecount = salecount + data[x].SoldQuantity;
                     }
                     $scope.noProd = pcount;
-                    $scope.noSale = salecount;
+                   
                 });
                 $http.get('/api/Orders').then(function (response) {
+                    var data = response.data;
+                    var salecount = 0;
+                    for (var x in data) {
+                        salecount++;
+                    }
+                    $scope.noSale = salecount;
+                });
+                $http.get('/api/Customers').then(function (response) {
                     var data = response.data;
                     var ccount = 0;
                     for (var x in data) {

@@ -12,17 +12,11 @@ namespace InventoryManagement.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Order
+    public partial class Customer
     {
         public int Id { get; set; }
-        public string CustomerName { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public int TotalPrice { get; set; }
-        public int OrderNo { get; set; }
-        public string SaleDate { get; set; }
-        public string Status { get; set; }
-        public string Reason { get; set; }
-        public string CustomerId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
     }
 }

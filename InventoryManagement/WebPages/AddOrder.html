@@ -56,12 +56,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="cname">Customer Name</label>
-                            <input type="text" ng-model="cname" id="cname" class="form-control">
+                            <select type="text" ng-model="cname" id="cname" class="form-control">
+                                <option ng-repeat="customer in list" value="{{customer.Id}}"> {{customer.Name}}</option>
+                            </select>
                         </div>
                         <div class="form-inline">
                             <label for="pname">Product Name</label>
                             <select id="pname" ng-model="pname" ng-change="selectChange()" class="form-control w-50 ml-1 mr-1">
-                                <option ng-repeat="row in result" value="{{row.Id}}"> {{row.Name}} {{row.ManufName}} </option>
+                                <option ng-repeat="row in result" value="{{row.Id}}"> {{row.Name}} {{row.ManufName}} {{row.PackingDetails}} </option>
                             </select>
                             <label for="quantity">Quantity</label>
                             <input type="number" id="quantity" ng-change="qtyChange()" ng-model="quantity" class="form-control ml-1" min="0" max="{{maxval}}"><span class="text-muted">/{{maxval}}</span>
@@ -115,6 +117,10 @@
                     $scope.result = response.data;
                 }, function error(response) {
                     swal("error in getting product list " + response.statusText);
+                    });
+                //populating customer dropdown
+                $http.get('/api/Customers').then(function (response) {
+                    $scope.list = response.data;
                 });
                 //selectchange
                 $scope.selectChange = function () {
@@ -187,8 +193,10 @@
                                 prod.SoldQuantity = prod.SoldQuantity + arr[x].qty;
                                 debugger;
                                 $http.put('/api/Products/' + arr[x].id, prod).then(function success(response) {
+
                                     var order = {
-                                        "CustomerName":$scope.cname,
+                                        "CustomerId": $scope.cname,
+                                        "CustomerName": $("#cname option:checked").text(),
                                         "ProductId":arr[x].id,
                                         "Quantity":arr[x].qty,
                                         "TotalPrice":totalp,
@@ -197,6 +205,7 @@
                                         "Status": "Sold",
                                         "Reason":""
                                     };
+                                    debugger;
                                     $http.post('/api/Orders', order).then(function success(response) {
                                         swal({
                                             text: "Order placed!",

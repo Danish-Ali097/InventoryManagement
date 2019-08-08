@@ -14,7 +14,7 @@ namespace InventoryManagement.Controllers.api
 {
     public class EmployeesController : ApiController
     {
-        private InventoryDBEntities2 db = new InventoryDBEntities2();
+        private InventoryDBEntities3 db = new InventoryDBEntities3();
 
         // GET: api/Employees
         public IQueryable<Employee> GetEmployees()

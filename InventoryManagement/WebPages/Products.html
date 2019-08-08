@@ -72,7 +72,7 @@
                                 <td>{{row.Name}}</td>
                                 <td>{{row.ManufName}}</td>
                                 <td>{{row.ExpDate}}</td>
-                                <td>{{row.PurchaseQuantity - SoldQuantity}}</td>
+                                <td>{{row.PurchaseQuantity - row.SoldQuantity}}</td>
                                 <td> <a href="#" ng-click="deleteProd(row.Id)">delete</a> </td>
                             </tr>
                         </tbody>

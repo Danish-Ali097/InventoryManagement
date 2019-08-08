@@ -25,5 +25,6 @@ namespace InventoryManagement.Models
         public string ImagePath { get; set; }
         public string PurchaseDate { get; set; }
         public Nullable<int> SoldQuantity { get; set; }
+        public string PackingDetails { get; set; }
     }
 }

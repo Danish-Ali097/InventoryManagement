@@ -13,10 +13,10 @@ namespace InventoryManagement.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class InventoryDBEntities2 : DbContext
+    public partial class InventoryDBEntities3 : DbContext
     {
-        public InventoryDBEntities2()
-            : base("name=InventoryDBEntities2")
+        public InventoryDBEntities3()
+            : base("name=InventoryDBEntities3")
         {
         }
     
@@ -26,6 +26,7 @@ namespace InventoryManagement.Models
         }
     
         public virtual DbSet<Admin> Admins { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Product> Products { get; set; }

@@ -55,11 +55,15 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <label for="pname">Product Name</label>
-                            <input type="text" id="pname" ng-model="pname" class="form-control">  
+                            <input type="text" id="pname" ng-model="pname" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="pmname">Manifacturer Name</label>
                             <input type="text" id="pmname" ng-model="pmname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="pkngdetail">Packing Detail</label>
+                            <input type="text" id="pkngdetail" ng-model="pkngdetail" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="pname">Exp. Date</label>
@@ -170,7 +174,8 @@
                         "PurchaseQuantity":$scope.qty,
                         "PurchasePrice":$scope.purchaseprice,
                         "SalePrice":$scope.saleprice,
-                        "ImagePath":imgpath,
+                        "ImagePath": imgpath,
+                        "PackingDetails": $scope.pkngdetail,
                         "PurchaseDate": "",
                         "SoldQuantity":""
                     };
