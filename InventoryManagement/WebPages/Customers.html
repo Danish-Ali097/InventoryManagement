@@ -63,6 +63,7 @@
                                 <th>Product Name</th>
                                 <th>Exp. Date</th>
                                 <th>Status</th>
+                                <th>Price</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -115,8 +116,14 @@
                                 <td id="pname${data[x].Id}"></td>
                                 <td id="pexp${data[x].Id}"></td>
                                 <td>${data[x].Status}</td>
-                                <td> <a href="#" onclick="revert(${data[x].Id})"> <i class="fa fa-undo-alt"></i> </a> </td>
+                                <td>${data[x].TotalPrice}</td>`;
+                        if (data[x].Status != 'returned') {
+                            txt += `<td> <a href="#" onclick="revert(${data[x].Id})"> <i class="fa fa-undo-alt"></i> </a> </td>
                             </tr>`;
+                        } else {
+                            txt += `<td></td></tr>`;
+                        }
+                                
                     }
                         $("#custoutput").append(txt);
                     function getProd(id, oid) {

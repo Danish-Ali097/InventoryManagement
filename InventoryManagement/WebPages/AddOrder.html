@@ -186,13 +186,14 @@
                     if (sessionStorage.getItem('cart') != null) {
                         arr = JSON.parse(sessionStorage.getItem('cart'));
                         sessionStorage.removeItem('cart');
+                        console.log(arr);
                         var oid = Math.random().toString().slice(2, 11);
                         for( var x in arr) {
                             $http.get('/api/Products/' + arr[x].id).then(function (response) {
                                 var prod = response.data;
                                 prod.SoldQuantity = prod.SoldQuantity + arr[x].qty;
                                 debugger;
-                                $http.put('/api/Products/' + arr[x].id, prod).then(function success(response) {
+                                $http.put('/api/Products/' + prod.Id, prod).then(function success(response) {
 
                                     var order = {
                                         "CustomerId": $scope.cname,
