@@ -182,69 +182,83 @@
                     promise.error(onerror);
                 }
                 //add order
+                var oid;
                 $scope.addOrder = function () {
                     if (sessionStorage.getItem('cart') != null) {
                         arr = JSON.parse(sessionStorage.getItem('cart'));
                         sessionStorage.removeItem('cart');
                         console.log(arr);
-                        var oid = Math.random().toString().slice(2, 11);
-                        for( var x in arr) {
-                            $http.get('/api/Products/' + arr[x].id).then(function (response) {
-                                var prod = response.data;
-                                prod.SoldQuantity = prod.SoldQuantity + arr[x].qty;
-                                debugger;
-                                $http.put('/api/Products/' + prod.Id, prod).then(function success(response) {
-
-                                    var order = {
-                                        "CustomerId": $scope.cname,
-                                        "CustomerName": $("#cname option:checked").text(),
-                                        "ProductId":arr[x].id,
-                                        "Quantity":arr[x].qty,
-                                        "TotalPrice":totalp,
-                                        "OrderNo":Number(oid),
-                                        "SaleDate": "",
-                                        "Status": "Sold",
-                                        "Reason":""
-                                    };
-                                    debugger;
-                                    $http.post('/api/Orders', order).then(function success(response) {
-                                        swal({
-                                            text: "Order placed!",
-                                            icon: "success",
-                                            button: { ok: true }
-                                        }).then(val => {
-                                            if (val) {
-                                                $http.get('/api/Products/' + response.data.ProductId).then(function (response) {
-                                                    var temp = response.data.PurchaseQuantity - response.data.SoldQuantity;
-                                                    if (temp <= response.data.DownLimit) {
-                                                        swal({
-                                                            text: "Item reached its DownLimit! \n Name : " + response.data.Name,
-                                                            icon: "warning",
-                                                            button: { ok: true }
-                                                        }).then(val => {
-                                                            if (val)
-                                                            { location.reload(); }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        
-                                    },
-                                    function error(response) {
-                                        swal({
-                                            text: "Order not placed!" + response.statusText,
-                                            icon: "error",
-                                            ok: true
-                                        }).then(val => { if (val) { location.reload(); } });
-                                    });
-                                },
-                                function error(response) {
-                                        console.log("error in putting product" + response.statusText);
-                                });
-                            });
+                         oid = Math.random().toString().slice(2, 11);
+                        for (var i = 0; i < arr.length; i++) {
+                            getproduct(arr[i]);
+                            console.log(i);
                         }
                     }
+                }
+                function getproduct(obj) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/api/Products/' + obj.id, true);
+                    xhr.onload = function () {
+                        if (this.status == '200') {
+                            var prod = JSON.parse(this.responseText);
+                            prod.SoldQuantity = prod.SoldQuantity + obj.qty;
+                            putorder(prod, obj.id, obj.qty);
+                            debugger;
+                        }
+                    }
+                    xhr.send();
+                }
+                function putorder(prod, id, qty) {
+                    console.log("put order called");
+                    $http.put('/api/Products/' + prod.Id, prod).then(function success(response) {
+                        var order = {
+                            "CustomerId": $scope.cname,
+                            "CustomerName": $("#cname option:checked").text(),
+                            "ProductId": id,
+                            "Quantity": qty,
+                            "TotalPrice": totalp,
+                            "OrderNo": Number(oid),
+                            "SaleDate": "",
+                            "Status": "Sold",
+                            "Reason": ""
+                        };
+                        //debugger;
+                        postorder(order);
+                    },
+                        function error(response) {
+                            console.log("error in putting product" + response.statusText);
+                        });
+                }
+                function postorder(order) {
+                    console.log("post function call");
+                    $http.post('/api/Orders', order).then(function success(response) {
+                        debugger;
+                        chklimit(response);
+                        swal({
+                            text: "Order placed!",
+                            icon: "success",
+                            button: { ok: true }
+                        });
+                    },
+                        function error(response) {
+                            swal({
+                                text: "Order not placed!" + response.statusText,
+                                icon: "error",
+                                ok: true
+                            }).then(val => { if (val) { location.reload(); } });
+                        });
+                }
+                function chklimit(res) {
+                    $http.get('/api/Products/' + res.data.ProductId).then(function (response) {
+                        var temp = response.data.PurchaseQuantity - response.data.SoldQuantity;
+                        if (temp <= response.data.DownLimit) {
+                            swal({
+                                text: "Item reached its DownLimit! \n Name : " + response.data.Name,
+                                icon: "warning",
+                                button: { ok: true }
+                            });
+                        }
+                    });
                 }
             });
         </script>
